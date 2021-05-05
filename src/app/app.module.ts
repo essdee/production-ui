@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './modules/auth/screens/login/login.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DashboardComponent } from './modules/dashboard/dashboard/dashboard.component';
+import { SidebarComponent } from './shared/sidebar/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
