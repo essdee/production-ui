@@ -2,3 +2,43 @@
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+input {
+    border: none;
+    outline: none
+  }
+  
+  .container {
+    border-radius: 15px
+  }
+  
+  @media(min-width:992px) {
+    .container {
+        background-image: linear-gradient(to bottom, rgb(255, 255, 255) 80%, rgb(242, 242, 253), rgb(164, 164, 235))
+    }
+  }
+  
+  @media(max-width:991px) {
+    img {
+        display: none
+    }
+  
+    .container {
+        background-image: linear-gradient(to bottom, rgb(255, 255, 255) 80%, rgb(242, 242, 253), rgb(164, 164, 235))
+    }
+  }
+  
+  @media(max-width:768px) {
+    img {
+        display: none
+    }
+  }
+  @media(max-width:567px) {
+    img {
+        display: none
+    }
+  
+    .container {
+        margin-left: 0px;
+        margin-top: 30px
+    }
+  }
