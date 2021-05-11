@@ -1,4 +1,5 @@
-<div class="container bg-white pb-5">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container bg-white pb-5" *ngIf="!isLoginClicked">
   <div class="row d-flex justify-content-start align-items-center mt-sm-5">
       <div class="col-lg-5 col-10">
           <div class="pb-5"> <img src="assets/images/landing.svg" alt="" style="width: 500px;
@@ -9,9 +10,27 @@
             <img src="assets/images/logo.svg" class="rounded mx-auto d-block" alt="...">
               <h5 class="text-center">Welcome to Essdee</h5>
               <form class="pt-4">
-                  <div class="d-flex flex-column pb-3"> <label for="email">Mobile No</label> <input type="text" name="mobile_no" id="mobileno" class="border-bottom border-primary" maxlength="10"> </div>
-                  <div class="d-flex flex-column pb-3"> <label for="password">Password</label> <input type="password" name="password" id="pwd" class="border-bottom border-primary" maxlength="4"> </div>
-                  <input type="button" value="Log in" class="btn btn-primary btn-block mb-3" (click)="showSuccess()">
+                  <div class="d-flex flex-column pb-3"> <label for="email">Mobile No</label> <input type="text" name="mobile_no" id="mobileno" class="border-bottom border-primary" maxlength="10" [(ngModel)]="mobileNumber"> </div>
+                   <label for="password" *ngIf="showPassword">Password</label>
+                  
+                  <div *ngIf="password && showPassword">
+                    <span
+                    (click)="toggleShowPassword()"
+                    class="fa fa-eye-slash" style="float: right;"></span>
+                  </div>
+                    <div class="d-flex flex-column pb-3" *ngIf="showPassword">
+                    <input type="text" name="password" id="pwd" class="border-bottom border-primary" [(ngModel)]="password"> 
+                  </div>
+                  <label for="password" *ngIf="!showPassword">Password</label>
+                  <div *ngIf="password && !showPassword">
+                    <span 
+                    (click)="toggleShowPassword()"
+                    class="fa fa-eye" style="float: right;"></span>
+                  </div>
+                    <div class="d-flex flex-column pb-3" *ngIf="!showPassword">
+                    <input type="password" name="password" id="pwd" class="border-bottom border-primary" [(ngModel)]="password"> 
+                  </div>
+                  <input type="button" value="Log in" class="btn btn-primary btn-block mb-3" (click)="verifyUser()">
                   <div class="register mt-5">
                       <a href="/otp">Set new password?</a>
                   </div>
@@ -19,4 +38,7 @@
           </div>
       </div>
   </div>
+</div>
+<div *ngIf="isLoginClicked">
+  <app-spinner></app-spinner>
 </div>
