@@ -14,6 +14,8 @@ import { ToastComponent } from './shared/toast/toast.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserManagementApiService } from './services/user-management-api/user-management-api.service';
 import { HomeScreenComponent } from './modules/home-screen/home-screen.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { TableComponent } from './shared/table/table.component';
 
 const appconfig = (config: UserManagementApiService) =>{
   return() => {
@@ -28,7 +30,9 @@ const appconfig = (config: UserManagementApiService) =>{
     OtpComponent,
     SetPasswordComponent,
     ToastComponent,
-    HomeScreenComponent
+    HomeScreenComponent,
+    NavbarComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,
