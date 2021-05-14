@@ -30,6 +30,7 @@ export class OtpComponent implements OnInit {
   }
 
   startTimer() {
+    // Todo: Use other function instead setInterval to handle timer
       this.interval = setInterval(() => {
         if(this.timeLeft > 0) {
           this.timeLeft--;
