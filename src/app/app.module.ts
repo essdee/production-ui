@@ -16,6 +16,7 @@ import { UserManagementApiService } from './services/user-management-api/user-ma
 import { HomeScreenComponent } from './modules/home-screen/home-screen.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { TableComponent } from './shared/table/table.component';
+import { CookieService } from 'ngx-cookie-service';
 
 const appconfig = (config: UserManagementApiService) =>{
   return() => {
@@ -43,6 +44,7 @@ const appconfig = (config: UserManagementApiService) =>{
     HttpClientModule
   ],
   providers: [UserManagementApiService,
+    CookieService,
   {
     provide:APP_INITIALIZER,
     useFactory:appconfig,
