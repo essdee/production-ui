@@ -10,7 +10,7 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ToastComponent } from './shared/toast/toast.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserManagementApiService } from './core/services/user-management-api/user-management-api.service';
-import { HomeScreenComponent } from './modules/home-screen/home-screen.component';
+import { HomeComponent } from './modules/home/home.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { TableComponent } from './shared/table/table.component';
 import { CookieService } from 'ngx-cookie-service';
@@ -25,7 +25,7 @@ const appconfig = (config: UserManagementApiService) =>{
     AppComponent,
     SpinnerComponent,
     ToastComponent,
-    HomeScreenComponent,
+    HomeComponent,
     NavbarComponent,
     TableComponent
   ],

@@ -10,5 +10,5 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   declarations: [LoginComponent, OtpComponent, SetPasswordComponent],
   imports: [AuthRoutingModule, CommonModule, ReactiveFormsModule, FormsModule],
 })
-export class AuthScreensModule {}
+export class AuthModule {}
 
