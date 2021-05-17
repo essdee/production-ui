@@ -18,10 +18,11 @@ export class OtpComponent implements OnInit {
   otp4!: string;
   loginAttemptId!: string;
   timeLeft: number = 60;
-  interval:any;
   isVerifyOtpClicked = false;
   isSendOtpClicked = false;
   isReSendOtpClicked = false;
+  remaining:number = 60;
+  timerOn = true;
 
   constructor(private router: Router, public userManagementApi: UserManagementApiService,
     public appComponent: AppComponent) {}
@@ -29,18 +30,23 @@ export class OtpComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  startTimer() {
-    // Todo: Use other function instead setInterval to handle timer
-      this.interval = setInterval(() => {
-        if(this.timeLeft > 0) {
-          this.timeLeft--;
-        } else {
-          this.timeLeft = 60;
-        }
-      },1000)
+ startTimer() {
+    var sec = this.remaining % 60;
+    if(sec==0){
+      this.timeLeft = 60
     }
-  pauseTimer(){
-    clearInterval(this.interval);
+    else{
+    this.timeLeft = sec < 10 ? 0 + sec : sec;
+    }
+    this.remaining -= 1;
+    
+    if(this.remaining >= 0 && this.timerOn) {
+      setTimeout(() => {
+          this.startTimer();
+      }, 1000);
+      return;
+    }
+    this.timerOn = false
   }
 
   // Todo: Alter below functions as per response format
@@ -52,7 +58,6 @@ export class OtpComponent implements OnInit {
     }
     this.is_otp_sent = true;
     this.startTimer();
-    // clearInterval(this.interval);
     // this.isButtonClicked = true;
     // await this.userManagementApi.initiateOtp(this.mobileNumber);
     // console.log(this.userManagementApi.result);
