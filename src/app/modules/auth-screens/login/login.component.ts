@@ -29,13 +29,13 @@ export class LoginComponent implements OnInit {
     }
     this.isLoginClicked = true;
     const body = {
-      "user": this.mobileNumber,
+      "usr": this.mobileNumber,
       "pwd": this.password
       };
 
     try {
       const res = await this.userManagementApi.api_call('post', 'login',body)
-      if (res){
+      if (res['full_name']){
         this.cookieService.set( 'userName', res['full_name'] ); 
         this.showHomeScreen();
       }
