@@ -28,13 +28,13 @@
                     margin-right: 8px;" *ngIf="isVerifyOtpClicked"></i>Verify OTP
                   </button>
                   <div style="text-align: center;">
-                  <button class="btn btn-primary btn-default mb-3 " style="padding-top: 2px;"[disabled]="isReSendOtpClicked" (click)="form.checkValidity()? resendOtp() : null" *ngIf="is_otp_sent == true">
+                  <button class="btn btn-primary btn-default mb-3 " style="padding-top: 2px;"[disabled]="isReSendOtpClicked" (click)="resendOtp()" *ngIf="timerOn == false">
                     <i class="fa fa-spinner fa-spin" style = "margin-left: -12px;
                     margin-right: 8px;" *ngIf="isReSendOtpClicked"></i>Resend OTP
                   </button>
                 </div>
               </form>
-              <h6 class="text-center" *ngIf="is_otp_sent == true"> Resend OTP in {{timeLeft}} seconds</h6>
+              <h6 class="text-center" *ngIf="timerOn == true && is_otp_sent == true"> Resend OTP in {{timeLeft}} seconds</h6>
           </div>
       </div>
   </div>
