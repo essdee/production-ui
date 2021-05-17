@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home-screen',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home-screen.component.scss']
 })
 export class HomeScreenComponent implements OnInit {
-
-  constructor() { }
+  userName !: string;
+  constructor(private cookieService: CookieService) { }
 
   ngOnInit(): void {
+    this.userName = this.cookieService.get('userName');
   }
 
 }
