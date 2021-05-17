@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
-import { UserManagementApiService } from 'src/app/services/user-management-api/user-management-api.service';
+import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
 @Component({
   selector: 'app-set-password',
@@ -16,30 +16,30 @@ export class SetPasswordComponent implements OnInit {
   ngOnInit(): void {
   }
   async setPassword() {
-    this.isButtonClicked = true;
-    if(this.password1 != this.password2){
-      this.appComponent.showDanger("Passwords do not match");
-      return;
-    }
-    await  this.userManagementApi.setPassword(this.password1);
-    // Todo: Alter as per response format
-    if(this.userManagementApi.result){
-      this.isButtonClicked = false;
-      if(this.userManagementApi.result.message.status){
-        if(this.userManagementApi.result.message.status == 'Success'){
-          this.password1 = '';
-          this.password2 = '';
-          this.appComponent.showSuccess('Password Updated');
-      }
-      if(this.userManagementApi.result.message.status == 'Failed'){
-        this.appComponent.showDanger('Password Update Failed');
-      }
-    }
-    }
-    else{
-      this.isButtonClicked = false;
-      this.appComponent.showDanger('Unable to reach server');
-    }
+    // this.isButtonClicked = true;
+    // if(this.password1 != this.password2){
+    //   this.appComponent.showDanger("Passwords do not match");
+    //   return;
+    // }
+    // await  this.userManagementApi.setPassword(this.password1);
+    // // Todo: Alter as per response format
+    // if(this.userManagementApi.result){
+    //   this.isButtonClicked = false;
+    //   if(this.userManagementApi.result.message.status){
+    //     if(this.userManagementApi.result.message.status == 'Success'){
+    //       this.password1 = '';
+    //       this.password2 = '';
+    //       this.appComponent.showSuccess('Password Updated');
+    //   }
+    //   if(this.userManagementApi.result.message.status == 'Failed'){
+    //     this.appComponent.showDanger('Password Update Failed');
+    //   }
+    // }
+    // }
+    // else{
+    //   this.isButtonClicked = false;
+    //   this.appComponent.showDanger('Unable to reach server');
+    // }
   }
 
   showPassword1 = false;

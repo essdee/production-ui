@@ -7,12 +7,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from '@angular/forms';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
-import { LoginComponent } from './modules/auth-screens/login/login.component';
-import { OtpComponent } from './modules/auth-screens/otp/otp.component';
-import { SetPasswordComponent } from './modules/auth-screens/set-password/set-password.component';
 import { ToastComponent } from './shared/toast/toast.component';
 import { HttpClientModule } from '@angular/common/http';
-import { UserManagementApiService } from './services/user-management-api/user-management-api.service';
+import { UserManagementApiService } from './core/services/user-management-api/user-management-api.service';
 import { HomeScreenComponent } from './modules/home-screen/home-screen.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { TableComponent } from './shared/table/table.component';
@@ -27,9 +24,6 @@ const appconfig = (config: UserManagementApiService) =>{
   declarations: [
     AppComponent,
     SpinnerComponent,
-    LoginComponent,
-    OtpComponent,
-    SetPasswordComponent,
     ToastComponent,
     HomeScreenComponent,
     NavbarComponent,

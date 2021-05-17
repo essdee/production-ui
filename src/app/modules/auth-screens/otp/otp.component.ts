@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
-import { UserManagementApiService } from 'src/app/services/user-management-api/user-management-api.service';
+import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
 @Component({
   selector: 'app-otp',

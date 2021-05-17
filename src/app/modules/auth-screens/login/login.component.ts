@@ -2,8 +2,8 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { AppComponent } from 'src/app/app.component';
-import { ToastService } from 'src/app/services/toast/toast.service';
-import { UserManagementApiService } from 'src/app/services/user-management-api/user-management-api.service';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
+import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
 @Component({
   selector: 'app-login',
