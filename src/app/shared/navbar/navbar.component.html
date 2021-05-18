@@ -1,14 +1,5 @@
-<ul ngbNav #nav="ngbNav" class="nav-tabs">
-    <li [ngbNavItem]="1">
-        <a ngbNavLink routerLink="/newdc">New DC</a>
-    </li>
-    <li [ngbNavItem]="2">
-        <a ngbNavLink routerLink="/viewdc">View DC</a>
-    </li>
-    <li [ngbNavItem]="3">
-        <a ngbNavLink routerLink="/newgrn">New GRN</a>
-    </li>
-    <li [ngbNavItem]="4">
-        <a ngbNavLink routerLink="/viewgrn">View GRN</a>
+<ul ngbNav #nav="ngbNav" [animation]="true" [activeId]="route.url" class="nav-pills" style="overflow: auto;white-space: nowrap;flex-wrap: nowrap;">
+    <li class="" [ngbNavItem]="link.path" *ngFor="let link of links" style="display: inline-block;">
+        <a ngbNavLink routerLink="{{link.path}}">{{link.name}}</a>
     </li>
 </ul>

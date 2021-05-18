@@ -8,7 +8,7 @@ import { SetPasswordComponent } from './set-password/set-password.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'otp', component: OtpComponent },
-    { path: 'set-password', component: SetPasswordComponent },
+  { path: 'set-password', component: SetPasswordComponent },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
 

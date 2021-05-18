@@ -1,35 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
+
 /* Importing Bootstrap SCSS file. */
+
 @import '~bootstrap/scss/bootstrap';
 input {
     border: none;
     outline: none
-  }
-  
-  .container {
+}
+
+.container {
     border-radius: 15px
-  }
-  
-  
-  @media(max-width:991px) {
+}
+
+@media(max-width:991px) {
     img {
         display: none
     }
-  }
-  
-  @media(max-width:768px) {
+}
+
+@media(max-width:768px) {
     img {
         display: none
     }
-  }
-  @media(max-width:567px) {
+}
+
+@media(max-width:567px) {
     img {
         display: none
     }
-  
     .container {
         margin-left: 0px;
         margin-top: 30px
     }
-  }
+}

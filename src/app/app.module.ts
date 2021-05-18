@@ -10,10 +10,8 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { ToastComponent } from './shared/toast/toast.component';
 import { HttpClientModule } from '@angular/common/http';
 import { UserManagementApiService } from './core/services/user-management-api/user-management-api.service';
-import { HomeComponent } from './modules/home/home.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { TableComponent } from './shared/table/table.component';
 import { CookieService } from 'ngx-cookie-service';
+import { PagenotfoundComponent } from './core/components/pagenotfound/pagenotfound.component';
 
 const appconfig = (config: UserManagementApiService) =>{
   return() => {
@@ -25,9 +23,7 @@ const appconfig = (config: UserManagementApiService) =>{
     AppComponent,
     SpinnerComponent,
     ToastComponent,
-    HomeComponent,
-    NavbarComponent,
-    TableComponent
+    PagenotfoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,10 +1,9 @@
-<img style="display: block;
-margin-left: auto;
-padding-top: 25px;
-margin-right: auto;" src="assets/images/rocket-icon.svg" alt="...">
-<legend style="text-align: center;">Hello {{userName}}!</legend>
+<app-header></app-header>
+<div class="bg-white shadow-sm">
+    <div class="container p-2 justify-center">
+        <app-navbar [links]="links"></app-navbar>
+    </div>
+</div>
 <div class="container">
-    <app-navbar></app-navbar>
-    <app-table></app-table>
     <router-outlet></router-outlet>
 </div>

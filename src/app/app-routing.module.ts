@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PagenotfoundComponent } from './core/components/pagenotfound/pagenotfound.component';
 import { HomeComponent } from './modules/home/home.component';
 
 const routes: Routes = [
@@ -10,12 +11,13 @@ const routes: Routes = [
         (m) => m.AuthModule
       ),
   },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', loadChildren: () => import('./modules/home/home.module').then((m) => m.HomeModule) },
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
+  { path: '**', component: PagenotfoundComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {enableTracing: false})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
