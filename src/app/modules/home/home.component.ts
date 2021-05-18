@@ -3,10 +3,10 @@ import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home-screen',
-  templateUrl: './home-screen.component.html',
-  styleUrls: ['./home-screen.component.scss']
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
-export class HomeScreenComponent implements OnInit {
+export class HomeComponent implements OnInit {
   userName !: string;
   constructor(private cookieService: CookieService) { }
 
