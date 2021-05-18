@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from "@angular/forms";
 import { FormsModule } from '@angular/forms';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
@@ -29,6 +29,7 @@ const appconfig = (config: UserManagementApiService) =>{
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    NgbNavModule,
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule

@@ -23,11 +23,11 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
   async verifyUser() {
+    this.isLoginClicked = true;
     if(this.mobileNumber.length != 10){
       this.appComponent.showDanger('Please Enter 10 digit mobile number');
       return;
     }
-    this.isLoginClicked = true;
     const body = {
       "usr": this.mobileNumber,
       "pwd": this.password
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
         this.isLoginClicked = false;
         this.mobileNumber = null;
         this.password = null;
-        this.appComponent.showDanger('Something went wrong please try again!');
+        this.appComponent.showDanger('Something went wrong please try again later!');
        }
     }
   }
