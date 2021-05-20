@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppComponent } from 'src/app/app.component';
+import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class OtpComponent implements OnInit {
   timerOn = true;
 
   constructor(private router: Router, public userManagementApi: UserManagementApiService,
-    public appComponent: AppComponent) {}
+    public toast: ToastService) {}
 
   ngOnInit(): void {
   }
@@ -53,7 +53,7 @@ export class OtpComponent implements OnInit {
   async sendOtp(){
     this.isSendOtpClicked = true;
     if(this.mobileNumber.length != 10){
-      this.appComponent.showDanger('Please Enter 10 digit mobile number');
+      this.toast.showDanger('Please Enter 10 digit mobile number');
       return;
     }
     this.is_otp_sent = true;
@@ -68,22 +68,22 @@ export class OtpComponent implements OnInit {
     //     this.loginAttemptId = this.userManagementApi.result.message.name
     //   }
     //   if(this.userManagementApi.result.message.error_message){
-    //     this.appComponent.showDanger(this.userManagementApi.result.message.error_message);
+    //     this.toast.showDanger(this.userManagementApi.result.message.error_message);
     //   }
     // }
     // else{
     //   this.isButtonClicked = false;
-    //   this.appComponent.showDanger('Unable to reach server');
+    //   this.toast.showDanger('Unable to reach server');
     // }
   }
   async verifyOtp(){
     this.isVerifyOtpClicked = true;
     if(this.mobileNumber.length != 10){
-      this.appComponent.showDanger('Please Enter 10 digit mobile number');
+      this.toast.showDanger('Please Enter 10 digit mobile number');
       return;
     }
     // if(this.otp.length != 4){
-    //   this.appComponent.showDanger('Please Enter 4 digit OTP');
+    //   this.toast.showDanger('Please Enter 4 digit OTP');
     //   return;
     // }
     this.router.navigateByUrl('/set-password');
@@ -96,19 +96,19 @@ export class OtpComponent implements OnInit {
     //     this.router.navigateByUrl('/set-password');
     //   }
     //   if(this.userManagementApi.result.message.status == 'Failed'){
-    //     this.appComponent.showDanger('Incorrect OTP');
+    //     this.toast.showDanger('Incorrect OTP');
     //   }
     //   if(this.userManagementApi.result.message.status == 'Expired'){
-    //     this.appComponent.showDanger('OTP Expired');
+    //     this.toast.showDanger('OTP Expired');
     //   }
     //   if(this.userManagementApi.result.message.status == 'Maximum Limit Reached'){
-    //     this.appComponent.showDanger('Maximum Limit Reached');
+    //     this.toast.showDanger('Maximum Limit Reached');
     //   }
     // }
     // }
     // else{
     //   this.isButtonClicked = false;
-    //   this.appComponent.showDanger('Unable to reach server');
+    //   this.toast.showDanger('Unable to reach server');
     // }
   }
   resendOtp(){

@@ -1,7 +1,5 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
-import { AppComponent } from 'src/app/app.component';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
@@ -15,51 +13,42 @@ export class LoginComponent implements OnInit {
   password: any;
   isLoginClicked = false;
   isVerified!: boolean;
+  showPassword = false;
 
-  constructor(private router: Router, public toastService: ToastService, public userManagementApi: UserManagementApiService,
-    private cookieService: CookieService,
-    public appComponent: AppComponent) {}
+  constructor(
+    private router: Router,
+    public toastService: ToastService,
+    public userManagementApi: UserManagementApiService,
+    public toast: ToastService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
   }
+
   async verifyUser() {
     this.isLoginClicked = true;
     if(this.mobileNumber.length != 10){
-      this.appComponent.showDanger('Please Enter 10 digit mobile number');
+      this.toast.showDanger('Please Enter 10 digit mobile number');
       return;
     }
     const body = {
       "usr": this.mobileNumber,
       "pwd": this.password
-      };
-
-    try {
-      const res = await this.userManagementApi.api_call('post', 'login',body)
-      if (res['full_name']){
-        this.cookieService.set( 'userName', res['full_name'] ); 
-        this.showHomeScreen();
+    };
+    this.userManagementApi.login(body).then((res) => {
+      if (res) {
+        const qparam = this.route.snapshot.queryParamMap.get("redirect_to");
+        if (qparam)
+          this.router.navigateByUrl(qparam);
+        else
+          this.router.navigateByUrl('/home');
       }
-    } catch(error) {
-       if(error.status == 401){
+      else {
         this.isLoginClicked = false;
-        this.appComponent.showDanger('Invalid mobile number or password!');
-       }
-       else{
-        this.isLoginClicked = false;
-        this.mobileNumber = null;
-        this.password = null;
-        this.appComponent.showDanger('Something went wrong please try again later!');
-       }
-    }
+      }
+    });
   }
-  showHomeScreen(){
-    this.isVerified = true;
-    if(this.isVerified){
-    this.router.navigateByUrl('/home');
-    }
-  }
-  
-  showPassword = false;
   
   toggleShowPassword() {
     this.showPassword = !this.showPassword;

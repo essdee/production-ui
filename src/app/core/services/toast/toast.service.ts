@@ -1,10 +1,9 @@
 import { Injectable, TemplateRef  } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToastService {
-
   toasts: any[] = [];
 
   // Push new Toasts to array with content and options
@@ -14,6 +13,21 @@ export class ToastService {
 
   // Callback method to remove Toast DOM element from view
   remove(toast: any) {
-    this.toasts = this.toasts.filter(t => t !== toast);
+    this.toasts = this.toasts.filter((t) => t !== toast);
+  }
+
+  showSuccess(successTpl: string | TemplateRef<any>) {
+    this.show(successTpl, {
+      classname: 'bg-success text-light',
+      delay: 2000,
+      autohide: true,
+    });
+  }
+
+  showDanger(dangerTpl: string | TemplateRef<any>) {
+    this.show(dangerTpl, {
+      classname: 'bg-danger text-light',
+      delay: 5000,
+    });
   }
 }
