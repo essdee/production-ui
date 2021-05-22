@@ -1,41 +1,48 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="container bg-white pb-5">
-  <div class="row d-flex justify-content-start align-items-center mt-sm-5">
-      <div class="col-lg-5 col-10">
-          <div class="pb-5"> <img src="assets/images/otp.svg" alt="" style="width: 500px;
+<div class="container pb-5">
+    <div class="row d-flex justify-content-start align-items-center mt-sm-5">
+        <div class="col-lg-5 col-10">
+            <div class="pb-5"> <img src="assets/images/otp.svg" alt="" style="width: 500px;
             height: 500px"> </div>
-      </div>
-      <div class="col-lg-4 offset-lg-2 col-md-6 offset-md-3">
-          <div class="mt-3 mt-md-5">
-            <img src="assets/images/logo.svg" class="rounded mx-auto d-block" alt="...">
-              <h5 class="text-center" *ngIf="is_otp_sent == false">Verify Mobile Number</h5>
-              <h5 class="text-center" *ngIf="is_otp_sent == true" style="padding-top: 2px;">Enter the code sent to {{mobileNumber}} </h5>
-              <form class="pt-4" ngNativeValidate #form >
-                  <div class="d-flex flex-column pb-3" *ngIf="is_otp_sent == false"> <label for="mobile_no">Mobile No</label> <input type="text" name="mobile_no" id="mobileno" class="border-bottom border-primary" maxlength="10" required [(ngModel)]="mobileNumber" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus /> </div>
-                  <div class="d-flex flex-row mt-5" *ngIf="is_otp_sent == true">
-                    <input type="text" name="otp" class="form-control" maxlength="1" required [(ngModel)]="otp1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus/> 
-                    <input type="text" name="otp" class="form-control" maxlength="1" required [(ngModel)]="otp2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus/> 
-                    <input type="text" name="otp" class="form-control" maxlength="1" required [(ngModel)]="otp3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus/> 
-                    <input type="text" name="otp" class="form-control" maxlength="1" required [(ngModel)]="otp4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus/> 
-                   </div>
-                   &nbsp;
-                  <button class="btn btn-primary btn-block mb-3" style="padding-top: 2px;"[disabled]="isSendOtpClicked" (click)="form.checkValidity()? sendOtp() : null" *ngIf="is_otp_sent == false">
-                    <i class="fa fa-spinner fa-spin" style = "margin-left: -12px;
-                    margin-right: 8px;" *ngIf="isSendOtpClicked"></i>Send OTP
-                  </button>
-                  <button class="btn btn-primary btn-block mb-3" style="padding-top: 2px;"[disabled]="isVerifyOtpClicked" (click)="form.checkValidity()? verifyOtp() : null" *ngIf="is_otp_sent == true">
-                    <i class="fa fa-spinner fa-spin" style = "margin-left: -12px;
-                    margin-right: 8px;" *ngIf="isVerifyOtpClicked"></i>Verify OTP
-                  </button>
-                  <div style="text-align: center;">
-                  <button class="btn btn-primary btn-default mb-3 " style="padding-top: 2px;"[disabled]="isReSendOtpClicked" (click)="resendOtp()" *ngIf="timerOn == false">
-                    <i class="fa fa-spinner fa-spin" style = "margin-left: -12px;
-                    margin-right: 8px;" *ngIf="isReSendOtpClicked"></i>Resend OTP
-                  </button>
-                </div>
-              </form>
-              <h6 class="text-center" *ngIf="timerOn == true && is_otp_sent == true"> Resend OTP in {{timeLeft}} seconds</h6>
-          </div>
-      </div>
-  </div>
+        </div>
+        <div class="col-lg-4 offset-lg-2 col-md-6 offset-md-3">
+            <div class="mt-3 mt-md-5">
+                <img src="assets/images/logo.svg" class="rounded mx-auto d-block" alt="...">
+                <h5 class="text-center" *ngIf="is_otp_sent == false">Verify Mobile Number</h5>
+                <h5 class="text-center" *ngIf="is_otp_sent == true" style="padding-top: 2px;">Enter the code sent to {{mobileForm.value['mobile_number']}} </h5>
+
+                <form class="pt-4" [formGroup]="mobileForm" (submit)="sendOtp()" ngNativeValidate *ngIf="!is_otp_sent">
+                    <div class="d-flex flex-column pb-3">
+                        <label for="mobile_no">Mobile No</label>
+                        <input type="text" name="mobile_no" id="mobileno" class="border-bottom border-primary bg-light" maxlength="10" required formControlName="mobile_number" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus />
+                        <button class="btn btn-primary btn-block my-3" type="submit" style="padding-top: 2px;" [disabled]="isSendOtpClicked">
+                          <i class="fa fa-spinner fa-spin" style="margin-left: -12px; margin-right: 8px;" *ngIf="isSendOtpClicked"></i>
+                          Send OTP
+                        </button>
+                    </div>
+                </form>
+
+                <form class="pt-4" [formGroup]="otpForm" ngNativeValidate *ngIf="is_otp_sent">
+                    <div class="row">
+                        <div class="col" *ngFor="let input of formInput;  index as i">
+                            <input #formRow type="text" formControlName="{{input}}" class="form-control text-center" maxlength="1" (keyup)="keyUpEvent($event, i)" (keydown)="keyDownEvent($event, i)">
+                        </div>
+                    </div>
+                    &nbsp;
+                    <button class="btn btn-primary btn-block mb-3" style="padding-top: 2px;" [disabled]="isVerifyOtpClicked" (click)="verifyOtp()" *ngIf="is_otp_sent == true">
+                      <i class="fa fa-spinner fa-spin" style="margin-left: -12px; margin-right: 8px;" *ngIf="isVerifyOtpClicked"></i>
+                      Verify OTP
+                    </button>
+
+                    <div style="text-align: center;">
+                        <button class="btn btn-primary btn-block mb-3 " style="padding-top: 2px;" [disabled]="isReSendOtpClicked" (click)="resendOtp()" *ngIf="timerOn == false">
+                        <i class="fa fa-spinner fa-spin" style="margin-left: -12px; margin-right: 8px;" *ngIf="isReSendOtpClicked"></i>
+                        Resend OTP
+                      </button>
+                    </div>
+                </form>
+                <h6 class="text-center" *ngIf="timerOn == true && is_otp_sent == true"> Resend OTP in {{timeLeft}} seconds</h6>
+            </div>
+        </div>
+    </div>
 </div>

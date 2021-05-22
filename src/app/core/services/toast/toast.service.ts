@@ -30,4 +30,11 @@ export class ToastService {
       delay: 5000,
     });
   }
+
+  showWarning(dangerTpl: string | TemplateRef<any>) {
+    this.show(dangerTpl, {
+      classname: 'bg-warning text-light',
+      delay: 5000,
+    });
+  }
 }

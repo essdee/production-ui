@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
@@ -6,115 +12,151 @@ import { UserManagementApiService } from 'src/app/core/services/user-management-
 @Component({
   selector: 'app-otp',
   templateUrl: './otp.component.html',
-  styleUrls: ['./otp.component.scss']
+  styleUrls: ['./otp.component.scss'],
 })
 export class OtpComponent implements OnInit {
   is_otp_sent: boolean = false;
   is_otp_resent: boolean = false;
-  mobileNumber!: string;
-  otp1!: string;
-  otp2!: string;
-  otp3!: string;
-  otp4!: string;
-  loginAttemptId!: string;
   timeLeft: number = 60;
   isVerifyOtpClicked = false;
   isSendOtpClicked = false;
   isReSendOtpClicked = false;
-  remaining:number = 60;
+  remaining: number = 60;
   timerOn = true;
+  
+  mobileForm: FormGroup;
+  formInput = ['input1', 'input2', 'input3', 'input4'];
+  otpForm: FormGroup;
+  otp_auth_attempt_name!: string;
+  delete: boolean = false;
 
-  constructor(private router: Router, public userManagementApi: UserManagementApiService,
-    public toast: ToastService) {}
-
-  ngOnInit(): void {
+  @ViewChildren('formRow') rows: any;
+  constructor(
+    private router: Router,
+    public userManagementApi: UserManagementApiService,
+    public toast: ToastService,
+    private fb: FormBuilder
+  ) {
+    this.mobileForm = this.fb.group({
+      mobile_number: ['', [Validators.required, Validators.minLength(10)]],
+    });
+    this.otpForm = this.toFormGroup(this.formInput);
+    console.log('in');
   }
 
- startTimer() {
-    var sec = this.remaining % 60;
-    if(sec==0){
-      this.timeLeft = 60
+  toFormGroup(elements: string[]) {
+    const group: any = {};
+    elements.forEach((key: string) => {
+      group[key] = new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+      ]);
+    });
+    return new FormGroup(group);
+  }
+
+  keyDownEvent(event: any, index: any) {
+    if (event.keyCode === 8 && event.which === 8) {
+      if (this.rows._results[index].nativeElement.value) {
+        this.delete = false;
+      } else {
+        this.delete = true;
+      }
+    } else this.delete = false;
+  }
+
+  keyUpEvent(event: any, index: any) {
+    let pos = index;
+    if (event.keyCode === 8 && event.which === 8) {
+      if (this.delete) pos = index - 1;
+    } else {
+      pos = index + 1;
     }
-    else{
-    this.timeLeft = sec < 10 ? 0 + sec : sec;
+    if (pos > -1 && pos < this.formInput.length) {
+      this.rows._results[pos].nativeElement.focus();
+    }
+  }
+
+  ngOnInit(): void {}
+
+  startTimer() {
+    var sec = this.remaining % 60;
+    if (sec == 0) {
+      this.timeLeft = 60;
+    } else {
+      this.timeLeft = sec < 10 ? 0 + sec : sec;
     }
     this.remaining -= 1;
-    
-    if(this.remaining >= 0 && this.timerOn) {
+
+    if (this.remaining >= 0 && this.timerOn) {
       setTimeout(() => {
-          this.startTimer();
+        this.startTimer();
       }, 1000);
       return;
     }
-    this.timerOn = false
+    this.timerOn = false;
   }
 
-  // Todo: Alter below functions as per response format
-  async sendOtp(){
+  getOtp(x: any): string {
+    let otp = '';
+    this.formInput.forEach((key: string) => {
+      otp += x[key];
+    }, otp);
+    return otp;
+  }
+
+  async sendOtp() {
     this.isSendOtpClicked = true;
-    if(this.mobileNumber.length != 10){
+    if (this.mobileForm.invalid) {
       this.toast.showDanger('Please Enter 10 digit mobile number');
+      this.isSendOtpClicked = false;
       return;
     }
-    this.is_otp_sent = true;
-    this.startTimer();
-    // this.isButtonClicked = true;
-    // await this.userManagementApi.initiateOtp(this.mobileNumber);
-    // console.log(this.userManagementApi.result);
-    // if(this.userManagementApi.result){
-    //   this.isButtonClicked = false;
-    //   if(this.userManagementApi.result.message.name){
-    //     this.is_otp_sent = true;
-    //     this.loginAttemptId = this.userManagementApi.result.message.name
-    //   }
-    //   if(this.userManagementApi.result.message.error_message){
-    //     this.toast.showDanger(this.userManagementApi.result.message.error_message);
-    //   }
-    // }
-    // else{
-    //   this.isButtonClicked = false;
-    //   this.toast.showDanger('Unable to reach server');
-    // }
-  }
-  async verifyOtp(){
-    this.isVerifyOtpClicked = true;
-    if(this.mobileNumber.length != 10){
-      this.toast.showDanger('Please Enter 10 digit mobile number');
-      return;
-    }
-    // if(this.otp.length != 4){
-    //   this.toast.showDanger('Please Enter 4 digit OTP');
-    //   return;
-    // }
-    this.router.navigateByUrl('/set-password');
-    // this.isButtonClicked = true;
-    // await this.userManagementApi.verifyOtp(this.loginAttemptId, this.otp);
-    // if(this.userManagementApi.result){
-    //   this.isButtonClicked = false;
-    //   if(this.userManagementApi.result.message.status){
-    //     if(this.userManagementApi.result.message.status == 'Success'){
-    //     this.router.navigateByUrl('/set-password');
-    //   }
-    //   if(this.userManagementApi.result.message.status == 'Failed'){
-    //     this.toast.showDanger('Incorrect OTP');
-    //   }
-    //   if(this.userManagementApi.result.message.status == 'Expired'){
-    //     this.toast.showDanger('OTP Expired');
-    //   }
-    //   if(this.userManagementApi.result.message.status == 'Maximum Limit Reached'){
-    //     this.toast.showDanger('Maximum Limit Reached');
-    //   }
-    // }
-    // }
-    // else{
-    //   this.isButtonClicked = false;
-    //   this.toast.showDanger('Unable to reach server');
-    // }
-  }
-  resendOtp(){
-    this.isReSendOtpClicked = true;
-    this.is_otp_resent = true;
-    // this.userManagementApi.resendOtp(this.loginAttemptId);
+    console.log(this.mobileForm.value);
+    this.userManagementApi.sendOtp(this.mobileForm.value).then((res) => {
+      if (res) {
+        this.otp_auth_attempt_name = res['otp_auth_attempt_name'];
+        this.is_otp_sent = true;
+        this.startTimer();
+        this.rows._results[0].nativeElement.focus();
+      } else this.isSendOtpClicked = false;
+    });
   }
 
+  async verifyOtp() {
+    console.log(this.otpForm.value);
+    this.isVerifyOtpClicked = true;
+    if (!this.otpForm.valid) {
+      this.toast.showDanger('Please Enter a valid OTP');
+      this.isVerifyOtpClicked = false;
+      return;
+    }
+    console.log(this.getOtp(this.otpForm.value));
+
+    this.userManagementApi.verifyOtp({
+      otp_auth_attempt_name: this.otp_auth_attempt_name,
+      incoming_otp: this.getOtp(this.otpForm.value),
+      action: "get_reset_password_key"
+    }).then((res) => {
+      if (res) {
+        this.router.navigateByUrl('/auth/set-password', {state: res});
+      }
+      else
+        this.isVerifyOtpClicked = false;
+    });
+  }
+
+  resendOtp() {
+    this.isReSendOtpClicked = true;
+    this.userManagementApi.resendOtp({ otp_auth_attempt_name: this.otp_auth_attempt_name }).then((x) => {
+      if (x) {
+        this.is_otp_sent = true;
+        this.startTimer();
+        this.isReSendOtpClicked = false;
+      } else {
+        this.isReSendOtpClicked = false;
+      }
+
+    });
+  }
 }
