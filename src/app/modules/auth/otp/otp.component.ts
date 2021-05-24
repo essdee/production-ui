@@ -139,7 +139,9 @@ export class OtpComponent implements OnInit {
       action: "get_reset_password_key"
     }).then((res) => {
       if (res) {
-        this.router.navigateByUrl('/auth/set-password', {state: res});
+        this.router.navigate(['/auth/set-password'], {
+          queryParams: { reset_password_key: res['reset_password_key'] },
+        });
       }
       else
         this.isVerifyOtpClicked = false;
@@ -150,7 +152,8 @@ export class OtpComponent implements OnInit {
     this.isReSendOtpClicked = true;
     this.userManagementApi.resendOtp({ otp_auth_attempt_name: this.otp_auth_attempt_name }).then((x) => {
       if (x) {
-        this.is_otp_sent = true;
+        this.timerOn = true;
+        this.remaining = 30;
         this.startTimer();
         this.isReSendOtpClicked = false;
       } else {

@@ -1,5 +1,5 @@
-<ul ngbNav #nav="ngbNav" [animation]="true" [activeId]="route.url" class="nav-pills" style="overflow: auto;white-space: nowrap;flex-wrap: nowrap;">
-    <li class="" [ngbNavItem]="link.path" *ngFor="let link of links" style="display: inline-block;">
+<ul ngbNav #nav="ngbNav" [animation]="true" [activeId]="route.url" class="nav-pills">
+    <li [ngbNavItem]="link.path" *ngFor="let link of links">
         <a ngbNavLink routerLink="{{link.path}}">{{link.name}}</a>
     </li>
 </ul>

@@ -1,19 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 import { UserManagementApiService } from 'src/app/core/services/user-management-api/user-management-api.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  mobileNumber: any;
-  password: any;
   isLoginClicked = false;
-  isVerified!: boolean;
   showPassword = false;
   myForm: FormGroup;
 
@@ -26,16 +23,23 @@ export class LoginComponent implements OnInit {
   ) {
     this.myForm = this.fb.group({
       usr: ['', [Validators.required, Validators.minLength(10)]],
-      pwd: ['', Validators.required]
+      pwd: ['', Validators.required],
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  get user() {
+    return this.myForm.controls.usr;
+  }
+
+  get password() {
+    return this.myForm.controls.pwd;
   }
 
   async verifyUser() {
     this.isLoginClicked = true;
-    if(this.myForm.invalid){
+    if (this.myForm.invalid) {
       this.toast.showDanger('Please Enter the credentials properly!');
       return;
     }
@@ -49,7 +53,7 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-  
+
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
   }
