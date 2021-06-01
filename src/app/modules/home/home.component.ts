@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-home-screen',
@@ -8,15 +7,15 @@ import { CookieService } from 'ngx-cookie-service';
 })
 export class HomeComponent implements OnInit {
   userName!: string;
-  links = [
-    { name: 'New DC', path: '/home/newdc' },
-    { name: 'View DC', path: '/home/viewdc' },
-    { name: 'New GRN', path: '/home/newgrn' },
-    { name: 'View GRN', path: '/home/viewgrn' },
+
+  mainLinks = [
+    { name: 'Master', path: '/home/master' },
+    { name: 'Manufacturing', path: '/home/mfg' },
   ];
-  constructor(private cookieService: CookieService) {}
+
+  constructor() {}
 
   ngOnInit(): void {
-    this.userName = this.cookieService.get('userName');
+    this.userName = '';
   }
 }

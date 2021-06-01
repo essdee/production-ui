@@ -23,7 +23,7 @@ export class OtpComponent implements OnInit {
   isReSendOtpClicked = false;
   remaining: number = 60;
   timerOn = true;
-  
+
   mobileForm: FormGroup;
   formInput = ['input1', 'input2', 'input3', 'input4'];
   otpForm: FormGroup;
@@ -133,33 +133,34 @@ export class OtpComponent implements OnInit {
     }
     console.log(this.getOtp(this.otpForm.value));
 
-    this.userManagementApi.verifyOtp({
-      otp_auth_attempt_name: this.otp_auth_attempt_name,
-      incoming_otp: this.getOtp(this.otpForm.value),
-      action: "get_reset_password_key"
-    }).then((res) => {
-      if (res) {
-        this.router.navigate(['/auth/set-password'], {
-          queryParams: { reset_password_key: res['reset_password_key'] },
-        });
-      }
-      else
-        this.isVerifyOtpClicked = false;
-    });
+    this.userManagementApi
+      .verifyOtp({
+        otp_auth_attempt_name: this.otp_auth_attempt_name,
+        incoming_otp: this.getOtp(this.otpForm.value),
+        action: 'get_reset_password_key',
+      })
+      .then((res) => {
+        if (res) {
+          this.router.navigate(['/auth/set-password'], {
+            queryParams: { reset_password_key: res['reset_password_key'] },
+          });
+        } else this.isVerifyOtpClicked = false;
+      });
   }
 
   resendOtp() {
     this.isReSendOtpClicked = true;
-    this.userManagementApi.resendOtp({ otp_auth_attempt_name: this.otp_auth_attempt_name }).then((x) => {
-      if (x) {
-        this.timerOn = true;
-        this.remaining = 30;
-        this.startTimer();
-        this.isReSendOtpClicked = false;
-      } else {
-        this.isReSendOtpClicked = false;
-      }
-
-    });
+    this.userManagementApi
+      .resendOtp({ otp_auth_attempt_name: this.otp_auth_attempt_name })
+      .then((x) => {
+        if (x) {
+          this.timerOn = true;
+          this.remaining = 30;
+          this.startTimer();
+          this.isReSendOtpClicked = false;
+        } else {
+          this.isReSendOtpClicked = false;
+        }
+      });
   }
 }

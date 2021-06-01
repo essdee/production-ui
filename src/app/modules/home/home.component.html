@@ -1,9 +1,2 @@
-<app-header></app-header>
-<div class="bg-white shadow-sm">
-    <div class="container p-2 justify-center">
-        <app-navbar [links]="links"></app-navbar>
-    </div>
-</div>
-<div class="container">
-    <router-outlet></router-outlet>
-</div>
+<app-header [links]="mainLinks"></app-header>
+<router-outlet></router-outlet>

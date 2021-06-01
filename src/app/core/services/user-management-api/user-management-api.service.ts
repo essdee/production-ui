@@ -23,8 +23,8 @@ export class UserManagementApiService {
         return res;
       })
       .catch((err) => {
-        this.api.handleError(err);
         if (err.status == 404) this.toast.showDanger('Invalid mobile number');
+        else this.api.handleError(err);
         return null;
       });
   }
@@ -90,9 +90,8 @@ export class UserManagementApiService {
         return true;
       })
       .catch((err) => {
-        this.api.handleError(err);
-        if (err.status == 401)
-          this.toast.showDanger('Invalid mobile number or password!');
+        if (err.status == 401) this.toast.showDanger('Invalid mobile number or password!');
+        else this.api.handleError(err);
         return false;
       });
   }
