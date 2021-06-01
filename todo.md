@@ -1,0 +1,2 @@
+- [ ] Move cdn files to assets.
+- [ ] Test CSRF.
