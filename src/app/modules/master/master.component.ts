@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-master',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MasterComponent implements OnInit {
   links = [
-    { name: 'Supplier', path: '/home/master/supplier' },
+    { name: 'Supplier', path: '/home/master/supplier/supplier-list' }
   ];
 
   constructor() {}
