@@ -1,0 +1,368 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<ng-template #address let-modal>
+  <div class="modal-header border-0">
+    <h5 class="modal-title">New Address</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+        <form [formGroup]="addressForm" (ngSubmit)="submitAddressForm()" ngNativeValidate>
+          
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-3">
+              <label for="address_title">Address Title</label>
+              <input type="text" class="form-control" formControlName="address_title" id="address_title" autofocus>
+            </div>
+  
+            <div class="form-group col-md-6 mb-3">
+                <label for="address_line_1">Address Line 1</label>
+                <input type="text" class="form-control" formControlName="address_line_1" id="address_line_1" required autofocus>  
+              <div *ngIf="addressForm.controls.address_line_1.invalid && addressForm.controls.address_line_1.touched" class="text-danger">
+                <div *ngIf="addressForm.hasError('required', 'address_line_1')">
+                    *Address Line 1 is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-3">
+              <label for="address_line_2">Address Line 2</label>
+              <input type="text" class="form-control" formControlName="address_line_2" id="address_line_2" autofocus>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+                <label for="city">City/Town</label>
+                <input type="text" class="form-control" formControlName="city" id="city" required autofocus> 
+                <div *ngIf="addressForm.controls.city.invalid && addressForm.controls.city.touched" class="text-danger">
+                  <div *ngIf="addressForm.hasError('required', 'city')">
+                      *City/Town is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-3">
+              <label for="pincode">Pincode</label>
+              <input type="text" class="form-control" formControlName="pincode" id="pincode" maxlength="6" required autofocus>
+              <div *ngIf="addressForm.controls.pincode.invalid && addressForm.controls.pincode.touched" class="text-danger">
+                <div *ngIf="addressForm.hasError('minlength', 'pincode')">
+                  *Invalid Pincode
+                </div>
+                <div *ngIf="addressForm.hasError('required', 'pincode')">
+                    *Pincode is required.
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="state">State</label>
+              <input type="text" class="form-control" formControlName="state" id="state" required autofocus> 
+                <div *ngIf="addressForm.controls.state.invalid && addressForm.controls.state.touched" class="text-danger">
+                  <div *ngIf="addressForm.hasError('required', 'state')">
+                      *State is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-3">
+              <label for="gstin">GSTIN</label>
+              <input type="text" class="form-control" id="gstin" formControlName="gstin" maxlength="15" autofocus>
+              <div *ngIf="addressForm.controls.gstin.invalid && addressForm.controls.gstin.touched" class="text-danger">
+                <div *ngIf="addressForm.hasError('minlength', 'gstin')">
+                  *Invalid GSTIN
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-md-6 mb-3">
+              <label for="phone">Phone</label>
+              <input type="text" class="form-control" formControlName="phone" id="phone" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" autofocus>
+              <div *ngIf="addressForm.controls.phone.invalid && addressForm.controls.phone.touched" class="text-danger">
+                <div *ngIf="addressForm.hasError('minlength', 'phone')">
+                  *Invalid Mobile Number
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6 mb-3">
+              <label for="email">Email</label>
+              <input type="text" class="form-control" formControlName="email" id="email" autofocus>
+              <div *ngIf="addressForm.controls.email.invalid && addressForm.controls.email.touched" class="text-danger">
+                <div *ngIf="addressForm.hasError('email', 'email')">
+                  *Invalid Email Address
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="is_default_address" formControlName="is_default_address">
+              <label class="form-check-label" for="is_default_address">Is Default Address</label>
+            </div>
+          </div>
+
+          <div class="modal-footer border-0 ">
+            <button type="submit" class="btn btn-success">Save</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contactDialog let-modal>
+  <div class="modal-header border-0">
+    <h5 class="modal-title">New Contact</h5>
+    <button type="button" class="close" #contactDialogClose aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid overflow-auto">
+        <form [formGroup]="contactForm" (ngSubmit)="submitContactForm()" ngNativeValidate>
+         <div class="form-row">
+          <div class="form-group col-md-6 mb-3">
+              <label for="full_name">Full Name</label>
+              <input type="text" class="form-control" formControlName="full_name" id="full_name" required autofocus>
+
+            <div *ngIf="contactForm.controls.full_name.invalid && contactForm.controls.full_name.touched" class="text-danger">
+              <div *ngIf="contactForm.hasError('required', 'full_name')">
+                  *Full name is required.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-6 mb-3">
+              <label for="designation">Designation</label>
+              <input type="text" class="form-control" formControlName="designation" id="designation" required autofocus>
+            
+            <div *ngIf="contactForm.controls.designation.invalid && contactForm.controls.designation.touched" class="text-danger">
+              <div *ngIf="contactForm.hasError('required', 'designation')">
+                  *Designation is required.
+              </div>
+            </div>
+          </div>
+        </div>
+         
+        <div class="form-row">
+          <div class="form-group col-md-6 mb-3">
+              <label for="phone">Phone</label>
+              <input type="text" class="form-control" formControlName="phone_number" id="phone" maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required autofocus>
+              <div *ngIf="contactForm.controls.phone_number.invalid && contactForm.controls.phone_number.touched" class="text-danger">
+                <div *ngIf="contactForm.hasError('required', 'phone_number')">
+                  *Mobile Number is required.
+                </div>
+                <div *ngIf="contactForm.hasError('minlength', 'phone_number')">
+                  *Mobile Number is not valid
+                </div>
+              </div>
+          </div>
+          <div class="form-group col-md-6 mb-3">
+              <label for="email">Email</label>
+              <input type="text" class="form-control" formControlName="email" id="email" autofocus>
+              <div *ngIf="contactForm.controls.email.invalid && contactForm.controls.email.touched" class="text-danger">
+                <div *ngIf="contactForm.hasError('email', 'email')">
+                  *Invalid Email Address
+                </div>
+              </div>
+              </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-check">
+              <input type="checkbox" class="checkbox-inline form-check-input" id="send_sms_updates" formControlName="send_sms_updates">
+              <label class="form-check-label" for="send_sms_updates">Send SMS Updates</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-check">
+              <input type="checkbox" class="checkbox-inline form-check-input" id="send_email_updates" formControlName="send_email_updates">
+              <label  class="form-check-label"for="send_email_updates">Send Email Updates</label>
+            </div>
+          </div>
+
+          <div class="modal-footer border-0">
+            <button type="submit" class="btn btn-success">Save</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<div class="row mt-3">
+  <div class="col-7">
+    <h5>New Supplier</h5>
+  </div>
+  <div class="col-5 text-right">
+    <button type="button" class="btn btn-primary btn-md pull-right" (click)="create_supplier()">Save</button>
+  </div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded">
+  <div class="card-header bg-white border-0">
+    <strong>Basic Information</strong>
+  </div>
+    <div class="card-body container-fluid">
+    <form [formGroup]="basicInfoForm" ngNativeValidate>
+      <div class="form-row">
+        <div class="form-group col-md-5 mb-3">
+            <label for="supplier_name">Supplier Name</label>
+            <input type="text" class="form-control" formControlName="supplier_name" id="supplier_name" required autofocus>
+            <div *ngIf="basicInfoForm.controls.supplier_name.invalid && basicInfoForm.controls.supplier_name.touched" class="text-danger">
+            <div *ngIf="basicInfoForm.hasError('required', 'supplier_name')">
+                *Supplier name is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group col-md-5 mb-3">
+          <label>Department</label>
+          <ng-multiselect-dropdown
+          [placeholder]="'Select Department'"
+          [settings]="dropdownSettings"
+          [data]="dropdownList"
+          (ngModel)="selectedItems"
+          (onSelect)="onItemSelect($event)"
+          (onSelectAll)="onSelectAll($event)" formControlName="department">
+        </ng-multiselect-dropdown>
+        <div *ngIf="basicInfoForm.controls.department.invalid && basicInfoForm.controls.department.touched" class="text-danger">
+          <div *ngIf="basicInfoForm.hasError('required', 'department')">
+              *Department is required.
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-md-5 mb-3">
+          <label for="pan">PAN</label>
+          <input type="text" class="form-control" id="pan" formControlName="pan" maxlength="10" required autofocus>
+          <div *ngIf="basicInfoForm.controls.pan.invalid && basicInfoForm.controls.pan.touched" class="text-danger">
+            <div *ngIf="basicInfoForm.hasError('required', 'pan')">
+              *PAN is required.
+            </div>
+            <div *ngIf="basicInfoForm.hasError('minlength', 'pan')">
+              *Invalid PAN
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    </div>
+</div>
+
+
+<div class="card mt-3 shadow bg-white rounded overflow-auto">
+  <div class="card-header bg-white border-0" (click)="collapseAddressContactSection.toggle()" [attr.aria-expanded]="!isAddressContactSectionCollapsed"
+  aria-controls="isAddressContactSection">
+    <strong style = "cursor: pointer;">Address and Contacts</strong>
+    <span class="d-inline-block btn ">
+        <i class="fa fa-angle-down"></i>
+    </span>
+  </div>
+    <div class="row card-body container-fluid" #collapseAddressContactSection="ngbCollapse" [(ngbCollapse)]="isAddressContactSectionCollapsed">
+      <div class="col-md-6 mb-3" (ngModel)="address_list">
+          <div class="card mt-3 mb-2 shadow bg-light rounded overflow-auto" *ngFor="let addr of address_list ; let i = index">
+              <div class="card-body container-fluid">
+              <p class="h6">   {{i+1}}. {{addr.address_title}}   <a class="btn btn-outline-primary btn-sm pull-right"  (click)="openLg(address, addr, 'addressForm')">Edit</a>  </p>
+              <p>{{addr.address_line_1}}<br>{{addr.address_line_2}}<br>{{addr.city}} <br>
+                {{addr.state}}<br>Postal Code: {{addr.pincode}}<br>
+                Contact Info: {{addr.phone}}<br>{{addr.email}}<br>GSTIN: {{addr.gstin}}<br></p>
+            </div>
+          </div>
+          <p class="text-muted small" *ngIf="!address_list">No address added yet.</p>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openLg(address, null, null)">New Address</button>
+      </div>
+      <div class="col-md-5 mb-3"  >
+        <div class="card mt-3 mb-2 shadow bg-light rounded overflow-auto"  *ngFor="let contact of contact_list ; let i = index">
+          <div class="card-body container-fluid">
+          <p class="h6">   {{i+1}}. {{contact.full_name}}   <a class="btn btn-outline-primary btn-sm pull-right" (click)="openLg(contactDialog, contact, 'contactForm')"> Edit</a>  </p>
+          <p>{{contact.designation}}<br>
+            Contact Info: {{contact.phone_number}}<br>{{contact.email}}<br></p>
+        </div>
+      </div>
+        <p class="text-muted small" *ngIf="!contact_list">No contacts added yet.</p>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="openLg(contactDialog, null, null)">New Contact</button>
+      </div>
+    </div>
+  <div >
+</div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded overflow-auto">
+  <div class="card-header bg-white border-0" (click)="collapseItemPriceSection.toggle()" [attr.aria-expanded]="!isItemPriceSectionCollapsed"
+  aria-controls="isItemPriceSection">
+    <strong style = "cursor: pointer;">Item Price Details</strong>
+    <span class="d-inline-block btn ">
+        <i class="fa fa-angle-down"></i>
+    </span>
+  </div>
+  <div >
+  <div class="card-body container-fluid" #collapseItemPriceSection="ngbCollapse" [(ngbCollapse)]="isItemPriceSectionCollapsed">
+    <app-item-price-table></app-item-price-table>
+  </div>
+</div>
+</div>
+
+
+
+<div class="card mt-3 shadow bg-white rounded overflow-auto">
+  <div class="card-header bg-white border-0" (click)="collapseLeadTimeSection.toggle()" [attr.aria-expanded]="!isLeadTimeSectionCollapsed"
+  aria-controls="isLeadTimeSection">
+    <strong style = "cursor: pointer;">Item Lead Time Details</strong>
+    <span class="d-inline-block btn ">
+        <i class="fa fa-angle-down"></i>
+    </span>
+  </div>
+  <div >
+  <div class="card-body container-fluid" #collapseLeadTimeSection="ngbCollapse" [(ngbCollapse)]="isLeadTimeSectionCollapsed">
+    <app-item-leadtime-table></app-item-leadtime-table>
+  </div>
+</div>
+</div>
+
+<div class="card mt-3 mb-5 shadow bg-white rounded overflow-auto">
+  <div class="card-header bg-white border-0" (click)="collapseMappingSection.toggle()" [attr.aria-expanded]="!isMappingSectionCollapsed"
+  aria-controls="isMappingSection">
+    <strong style = "cursor: pointer;">Accounting Site - Supplier Mapping</strong>
+    <span class="d-inline-block btn ">
+        <i class="fa fa-angle-down"></i>
+    </span>
+  </div>
+  <div >
+  <div class="card-body container-fluid" #collapseMappingSection="ngbCollapse" [(ngbCollapse)]="isMappingSectionCollapsed">
+    <table class="table table-striped table-bordered">
+      <thead>
+          <tr>
+              <th>Supplier</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let field of supplierMapping; let i = index">
+              <td>
+                  <input [(ngModel)]="supplierMapping[i]" class="form-control" type="text" name="{{field}}" />
+              </td>
+              <td>
+                  <button class="btn btn-outline-danger btn-sm"  type="button" (click)="deleteFieldValue(i)">Delete</button>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <input class="form-control" type="text" id="supplierName" [(ngModel)]="supplier" name="supplierName" (keyup.enter)="addFieldValue()"/>
+              </td>
+              <td>
+                  <button class="btn btn-outline-success btn-sm" type="button" (click)="addFieldValue()">Add</button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </div>
+</div>
+</div>
