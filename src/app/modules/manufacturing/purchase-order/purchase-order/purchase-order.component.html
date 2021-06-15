@@ -1,0 +1,292 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="row mt-3">
+  <div class="col-7">
+    <h5>New Purchase Order</h5>
+  </div>
+  <div class="col-5 text-right">
+    <button type="submit" class="btn btn-primary btn-sm pull-right" (click)="submitPo()">Save</button>
+  </div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded">
+	<div class="card-body container-fluid">
+		<form [formGroup]="poDetailsForm" ngNativeValidate>
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+				<label for="series">Series</label>
+				<select class="custom-select" formControlName="series"  required autofocus>
+					<option value=""></option>
+					<option value="PUR-ORD-.YYYY.-">PUR-ORD-.YYYY.-</option>
+				</select>
+				  <div *ngIf="poDetailsForm.controls.series.invalid && poDetailsForm.controls.series.touched" class="text-danger">
+				  <div *ngIf="poDetailsForm.hasError('required', 'series')">
+					  *Series is required.
+				  </div>
+				</div>
+				</div>
+				<div class="form-group col-md-5 mb-3">
+					<label for="po_date">Date</label>
+					<div class="input-group">
+					<input class="form-control" placeholder="yyyy-mm-dd" formControlName="po_date"
+						name="po_date"  ngbDatepicker #d="ngbDatepicker">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary calendar fa fa-calendar" (click)="d.toggle()" type="button"></button>
+					</div>
+					</div>
+					<div *ngIf="poDetailsForm.controls.po_date.invalid && poDetailsForm.controls.po_date.touched" class="text-danger">
+						<div *ngIf="poDetailsForm.hasError('required', 'po_date')">
+							*Date is required.
+						</div>
+					</div>
+			  </div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+				<label for="supplier">Supplier</label>
+				<select class="custom-select" formControlName="supplier"  required autofocus (change)="on_supplier_selection($event)">
+					<option value=""></option>
+					<option value="Test">Test</option>
+					<option value="Test1">Test1</option>
+					<option value="Test2">Test2</option>
+					<option value="Test3">Test3</option>
+				</select>
+				  <div *ngIf="poDetailsForm.controls.supplier.invalid && poDetailsForm.controls.supplier.touched" class="text-danger">
+				  <div *ngIf="poDetailsForm.hasError('required', 'supplier')">
+					  *Supplier is required.
+				  </div>
+				</div>
+				</div>
+				<div class="form-group col-md-5 mb-3">
+					<label for="supplier_address">Supplier Address</label>
+					<textarea id="supplier_address" name="supplier_address" rows="4"  formControlName="supplier_address"
+					style="border-color:#D3D3D3; outline-color:#D3D3D3" readonly=1 class="form-control">
+					</textarea>
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+					<label for="lot">Lot</label>
+					<ng-multiselect-dropdown
+					[placeholder]="'Select Lot'"
+					[settings]="lotDropdownSettings"
+					[data]="lot_list"
+					(ngModel)="selectedLot"
+					formControlName="lot">
+					</ng-multiselect-dropdown>
+					<div *ngIf="poDetailsForm.controls.lot.invalid && poDetailsForm.controls.lot.touched" class="text-danger">
+						<div *ngIf="poDetailsForm.hasError('required', 'lot')">
+							*Lot is required.
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-md-5 mb-3">
+					<label for="delivery_location">Delivery Location</label>
+				<select class="custom-select" formControlName="delivery_location"  required autofocus>
+					<option value=""></option>
+					<option value="Test Location">Test Location</option>
+					<option value="Test Location1">Test Location1</option>
+					<option value="Test Location2">Test Location2</option>
+					<option value="Test Location3">Test Location3</option>
+				</select>
+			  </div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="card mt-3 mb-3 shadow bg-white rounded">
+	<div class="card-header bg-white border-0" (click)="collapseItemDetailsSection.toggle()" [attr.aria-expanded]="!itemDetailsSectionCollapsed"
+		aria-controls="itemDetailsSection">
+		<strong style = "cursor: pointer;">Item Details</strong>
+		<span class="d-inline-block btn ">
+			<i class="fa fa-angle-down"></i>
+		</span>
+	</div>
+	<div class="card-body container-fluid" #collapseItemDetailsSection="ngbCollapse" [(ngbCollapse)]="itemDetailsSectionCollapsed">
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Item Name</th>
+					<th>Qty</th>
+					<th>Rate</th>
+					<th>Action</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>	
+				<tr *ngFor="let field of itemTableMapping; let i = index">
+					<td>
+						<input
+						id="item"
+						type="text"
+						class="form-control"
+						[ngbTypeahead]="search"
+						(focus)="focus$.next($any($event).target.value)"
+						(click)="click$.next($any($event).target.value)"
+						#instance="ngbTypeahead"
+						size="2"
+						name="{{field.item}}"
+						[(ngModel)]="field.item"
+						/>
+					</td>
+					<td><input class="form-control" type="text" id="qty" name="{{field.qty}}"
+						[(ngModel)]="field.qty" size="2"/></td>
+					<td><input class="form-control" type="text" id="rate" name="{{field.rate}}"
+						[(ngModel)]="field.rate" size="2" (keyup.enter)="addItemTableRow()"/></td>
+					<td>
+						<button class="btn btn-outline-danger btn-sm"  type="button" (click)="deleteItemTableRow(i)">Delete</button>
+					</td>
+					<td><span class="d-inline-block btn ">
+						<i class="fa fa-angle-down fa-lg" (click)="collapseRow.toggle()" [attr.aria-expanded]="!rowCollapsed"
+						aria-controls="row"></i>
+					</span></td>
+				</tr>
+
+				<tr>
+				<td>
+					<input
+					id="item"
+					type="text"
+					class="form-control"
+					[ngbTypeahead]="search"
+					(focus)="focus$.next($any($event).target.value)"
+					(click)="click$.next($any($event).target.value)"
+					#instance="ngbTypeahead"
+					size="2"
+					name="item"
+					[(ngModel)]="selectedItemRow.item"
+					/>
+				</td>
+				<td><input class="form-control" type="text" id="qty" name="qty" [(ngModel)]="selectedItemRow.qty" size="2"/></td>
+				<td><input class="form-control" type="text" id="rate" name="rate" [(ngModel)]="selectedItemRow.rate" size="2" (keyup.enter)="addItemTableRow()"/></td>
+				<td><button class="btn btn-outline-success btn-sm" type="button" (click)="addItemTableRow()">Add</button></td>
+				<td><span class="d-inline-block btn ">
+					<i class="fa fa-angle-down fa-lg" (click)="collapseRow.toggle()" [attr.aria-expanded]="!rowCollapsed"
+					aria-controls="row"></i>
+				</span></td>	
+			</tr>
+			<tr #collapseRow="ngbCollapse" [(ngbCollapse)]="rowCollapsed">
+				<td colspan="5">
+				<div class="container">
+					<label>Lot Mapping</label>
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>Lot.No.</th>
+							<th>Qty</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<tr *ngFor="let field of lotTableMapping; let i = index">
+							<td>
+								<select [(ngModel)]="field.lot_no" class="custom-select"  name="{{field.lot_no}}">
+									<option value=''></option>
+									<option value='LOT-0001'>LOT-0001</option>
+									<option value='LOT-0002'>LOT-0002</option>
+									<option value='LOT-0003'>LOT-0003</option>
+									<option value='LOT-0004'>LOT-0004</option>
+								</select>
+							</td>
+							<td>
+								<input class="form-control" type="text" id="lot_qty" name="{{field.lot_qty}}"  [(ngModel)]="field.lot_qty" size="2" (keyup.enter)="addLotTableRow()"/>
+							</td>
+							<td>
+								<button class="btn btn-outline-danger btn-sm"  type="button" (click)="deleteLotTableRow(i)">Delete</button>
+							</td>
+						</tr>
+
+						<tr>
+							<td><select class="custom-select"  name="lot_no" id="lot_no" [(ngModel)]="selectedLotRow.lot_no">
+								<option value=''></option>
+								<option value='LOT-0001'>LOT-0001</option>
+								<option value='LOT-0002'>LOT-0002</option>
+								<option value='LOT-0003'>LOT-0003</option>
+								<option value='LOT-0004'>LOT-0004</option>
+							</select></td>
+							<td><input class="form-control" type="text" id="lot_qty" name="lot_qty" [(ngModel)]="selectedLotRow.lot_qty" size="2" (keyup.enter)="addLotTableRow()"/></td>
+							<td><button class="btn btn-outline-success btn-sm" type="button" (click)="addLotTableRow()">Add</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<label>Delivery Mapping</label>
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Location</th>
+							<th>Qty</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<tr *ngFor="let field of deliveryTableMapping; let i = index">
+							<td><div class="input-group">
+								<input class="form-control" placeholder="yyyy-mm-dd" 
+									name="{{field.delivery_date}}"  ngbDatepicker #datepicker="ngbDatepicker" [(ngModel)]="field.delivery_date">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary calendar fa fa-calendar" (click)="datepicker.toggle()" type="button"></button>
+								</div>
+								</div></td>
+							<td><select id="location" [(ngModel)]="field.location" class="custom-select"  name="{{field.location}}">
+								<option value=''></option>
+								<option value='Kunnathur'>Kunnathur</option>
+								<option value='Chengapalli'>Chengapalli</option>
+								<option value='Kovai'>Kovai</option>
+								<option value='Erode'>Erode</option>
+							</select></td>
+							<td><input class="form-control" type="text" id="delivery_qty" name="{{field.delivery_qty}}" [(ngModel)]="field.delivery_qty"  size="2" (keyup.enter)="addDeliveryTableRow()"/></td>
+							<td>
+								<button class="btn btn-outline-danger btn-sm"  type="button" (click)="deleteDeliveryTableRow(i)">Delete</button>
+							</td>
+						</tr>
+
+						<tr>
+							<td><div class="input-group">
+								<input class="form-control" placeholder="yyyy-mm-dd" 
+									name="delivery_date"  ngbDatepicker #datepicker="ngbDatepicker" [(ngModel)]="selectedDeliveryRow.delivery_date">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary calendar fa fa-calendar" (click)="datepicker.toggle()" type="button"></button>
+								</div>
+								</div></td>
+							<td><select class="custom-select"  [(ngModel)]="selectedDeliveryRow.location" id="location" name="location">
+								<option value=''></option>
+								<option value='Kunnathur'>Kunnathur</option>
+								<option value='Chengapalli'>Chengapalli</option>
+								<option value='Kovai'>Kovai</option>
+								<option value='Erode'>Erode</option>
+							</select></td>
+							<td><input class="form-control" type="text" id="delivery_qty" name="delivery_qty" [(ngModel)]="selectedDeliveryRow.delivery_qty" size="2" (keyup.enter)="addDeliveryTableRow()"/></td>
+							<td><button class="btn btn-outline-success btn-sm" type="button" (click)="addDeliveryTableRow()">Add</button></td>
+						</tr>
+					</tbody>
+				</table>
+				<label>Item Comments</label>
+				<form [formGroup]="itemCommentForm">
+					<div class="form-group">
+						<textarea class="form-control" placeholder="Leave a comment" formControlName="comment" ></textarea>
+					</div>
+				</form>
+			</div>
+		</td>
+		</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="card mt-3 mb-3 shadow bg-white rounded">
+	<div class="card-header bg-white border-0" >
+		<strong >Comments</strong>
+	</div>
+	<div class="card-body container-fluid">
+<form [formGroup]="commentForm">
+    <div class="form-group">
+        <textarea class="form-control" placeholder="Leave a comment" formControlName="comment" ></textarea>
+    </div>
+</form>
+</div>
+</div>
