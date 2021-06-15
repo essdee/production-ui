@@ -6,12 +6,12 @@ import {Observable, Subject, merge, OperatorFunction} from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import { ToastService } from 'src/app/core/services/toast/toast.service';
 
-const items = ['Test Item 1',
-			'Test Item 2',
-			'Test Item 3',
-			'Test Item 4',
-			'Test Item 5',
-			'Test Item 6'];
+const items = [ 'Test Item 1',
+				'Test Item 2',
+				'Test Item 3',
+				'Test Item 4',
+				'Test Item 5',
+				'Test Item 6'];
 @Component({
   selector: 'app-purchase-order',
   templateUrl: './purchase-order.component.html',
