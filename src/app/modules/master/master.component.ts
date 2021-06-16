@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class MasterComponent implements OnInit {
   links = [
     { name: 'Supplier', path: '/home/master/supplier' },
+    { name: 'Item', path: '/home/master/item/item-list' }
   ];
 
   constructor() {}

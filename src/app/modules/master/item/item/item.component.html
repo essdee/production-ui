@@ -1,0 +1,442 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="row mt-3">
+	<div class="col-7">
+		<h5>New Item</h5>
+	</div>
+	<div class="col-5 text-right">
+		<button type="submit" class="btn btn-primary btn-sm pull-right" (click)="saveItem()">Save</button>
+	</div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded">
+	<div class="card-header bg-white border-0">
+		<strong>Item Details</strong>
+	</div>
+	<div class="card-body container-fluid">
+		<form [formGroup]="itemDetailsForm" ngNativeValidate>
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+					<label for="item_name">Item Name</label>
+					<input type="text" class="form-control" formControlName="item_name" id="item_name" required
+						autofocus>
+					<div *ngIf="itemDetailsForm.controls.item_name.invalid && itemDetailsForm.controls.item_name.touched"
+						class="text-danger">
+						<div *ngIf="itemDetailsForm.hasError('required', 'item_name')">
+							*Item name is required.
+						</div>
+					</div>
+				</div>
+				<div class="form-group col-md-5 mb-3">
+					<label>Category</label>
+					<ng-multiselect-dropdown [placeholder]="'Select Category'" [settings]="categoryDropdownSettings"
+						[data]="category_list" (ngModel)="selectedCategory" formControlName="category">
+					</ng-multiselect-dropdown>
+					<div *ngIf="itemDetailsForm.controls.category.invalid && itemDetailsForm.controls.category.touched"
+						class="text-danger">
+						<div *ngIf="itemDetailsForm.hasError('required', 'category')">
+							*Category is required.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+					<label for="default_uom">Default UOM</label>
+					<select class="custom-select" (change)="on_attribute_selection($event)"
+						formControlName="default_uom" id="default_uom" required autofocus>
+						<option value=""></option>
+						<option value="Box">Box</option>
+						<option value="Nos">Nos</option>
+						<option value="Meter">Meter</option>
+						<option value="Unit">Unit</option>
+						<option value="Set">Set</option>
+					</select>
+					<div *ngIf="itemDetailsForm.controls.default_uom.invalid && itemDetailsForm.controls.default_uom.touched"
+						class="text-danger">
+						<div *ngIf="itemDetailsForm.hasError('required', 'default_uom')">
+							*Default UOM is required.
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group col-md-5 mb-3">
+					<label for="default_attribute">Default Attribute</label>
+					<select class="custom-select" (change)="on_attribute_selection($event)"
+						formControlName="default_attribute" id="default_attribute" required autofocus>
+						<option value=""></option>
+						<option value="Size">Size</option>
+						<option value="Colour">Colour</option>
+						<option value="Part">Part</option>
+						<option value="Dia">Dia</option>
+					</select>
+					<div *ngIf="itemDetailsForm.controls.default_attribute.invalid && itemDetailsForm.controls.default_attribute.touched"
+						class="text-danger">
+						<div *ngIf="itemDetailsForm.hasError('required', 'default_attribute')">
+							*Default Attribute is required.
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-5 mb-3">
+					<label for="hsn_code">HSN Code</label>
+					<input type="text" class="form-control" formControlName="hsn_code" id="hsn_code" required autofocus>
+				</div>
+				<div class="form-group col-md-5 mb-3">
+					<div class="form-check mb-2">
+						<input type="checkbox" class="form-check-input" id="disabled" formControlName="disabled">
+						<label class="form-check-label" for="disabled">Disabled</label>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded">
+	<div class="card-header bg-white border-0" (click)="collapseItemAttrDetailsSection.toggle()"
+		[attr.aria-expanded]="!itemAttrDetailsSectionCollapsed" aria-controls="itemAttrDetailsSection">
+		<strong style="cursor: pointer;">Item Attribute Details</strong>
+		<span class="d-inline-block btn ">
+			<i class="fa fa-angle-down"></i>
+		</span>
+	</div>
+	<div class="card-body container-fluid" #collapseItemAttrDetailsSection="ngbCollapse"
+		[(ngbCollapse)]="itemAttrDetailsSectionCollapsed">
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Attribute</th>
+					<th>Attribute Value</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let field of itemAttributeDetails; let i = index">
+					<td>
+						<select class="custom-select" (change)="on_attribute_selection($event)"
+							name="{{field.attribute}}" [(ngModel)]="field.attribute">
+							<option selected>Select Attribute</option>
+							<option value="Size">Size</option>
+							<option value="Colour">Colour</option>
+							<option value="Part">Part</option>
+							<option value="Dia">Dia</option>
+						</select>
+					</td>
+					<td>
+						<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+							[settings]="attributeValueDropdownSettings" [data]="attribute_value_list"
+							[disabled]="disableAttribute" (ngModel)="selected_attr_value">
+						</ng-multiselect-dropdown>
+					</td>
+					<td>
+						<button class="btn btn-outline-danger btn-sm" type="button" (click)="deleteAttributeDetails(i)">
+							<i class="fa fa-minus"></i></button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<select class="custom-select" (change)="on_attribute_selection($event)" name="attribute"
+							[(ngModel)]="selectedItemAttributeRow.attribute">
+							<option selected>Select Attribute</option>
+							<option value="Size">Size</option>
+							<option value="Colour">Colour</option>
+							<option value="Part">Part</option>
+							<option value="Dia">Dia</option>
+						</select>
+					</td>
+					<td>
+						<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+							[settings]="attributeValueDropdownSettings" [data]="attribute_value_list"
+							[disabled]="disableAttribute" (ngModel)="selected_attr_value">
+						</ng-multiselect-dropdown>
+					</td>
+					<td>
+						<button class="btn btn-outline-success btn-sm" type="button" (click)="addAttributeDetails()"> <i
+								class="fa fa-plus"></i></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="card mt-3 shadow bg-white rounded">
+	<div class="card-header bg-white border-0" (click)="collapseUomSection.toggle()"
+		[attr.aria-expanded]="!uomSectionCollapsed" aria-controls="uomSection">
+		<strong style="cursor: pointer;">Unit of Measure</strong>
+		<span class="d-inline-block btn ">
+			<i class="fa fa-angle-down"></i>
+		</span>
+	</div>
+	<div class="card-body container-fluid" #collapseUomSection="ngbCollapse" [(ngbCollapse)]="uomSectionCollapsed">
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>UOM</th>
+					<th>Conversion Factor</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let field of uomDetails; let i = index">
+					<td>
+						<select class="custom-select" name="{{field.uom}}" [(ngModel)]="field.uom">
+							<option value="Box">Box</option>
+							<option value="Nos">Nos</option>
+							<option value="Meter">Meter</option>
+							<option value="Unit">Unit</option>
+							<option value="Set">Set</option>
+						</select>
+					</td>
+					<td>
+						<input class="form-control" type="text" name="{{field.conversion_factor}}"
+							[(ngModel)]="field.conversion_factor" size="2" />
+					</td>
+					<td>
+						<button class="btn btn-outline-danger btn-sm" type="button" (click)="deleteUomDetails(i)"> <i
+								class="fa fa-minus"></i></button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<select class="custom-select" name="uom" id="uom" [(ngModel)]="selectedUomRow.uom">
+							<option value="Box">Box</option>
+							<option value="Nos">Nos</option>
+							<option value="Meter">Meter</option>
+							<option value="Unit">Unit</option>
+							<option value="Set">Set</option>
+						</select>
+					</td>
+					<td>
+						<input class="form-control" type="text" name="conversion_factor" id="conversion_factor"
+							[(ngModel)]="selectedUomRow.conversion_factor" size="2" (keyup.enter)="addUomDetails()" />
+					</td>
+					<td>
+						<button class="btn btn-outline-success btn-sm" type="button" (click)="addUomDetails()"> <i
+								class="fa fa-plus"></i></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="card mt-3 mb-5 shadow bg-white rounded" style="overflow-y: hidden;
+overflow-x: scroll; overflow: inherit">
+	<div class="card-header bg-white border-0" (click)="collapseBomDetailsSection.toggle()"
+		[attr.aria-expanded]="!bomDetailsSectionCollapsed" aria-controls="bomDetailsSection">
+		<strong style="cursor: pointer;">BOM Details</strong>
+		<span class="d-inline-block btn ">
+			<i class="fa fa-angle-down"></i>
+		</span>
+	</div>
+	<div class="card-body container-fluid" #collapseBomDetailsSection="ngbCollapse"
+		[(ngbCollapse)]="bomDetailsSectionCollapsed">
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr>
+					<th>Item Name</th>
+					<th>Qty of Product</th>
+					<th>Qty of Required Item</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<ng-container *ngFor="let field of bomDetails; let i = index">
+					<tr>
+						<td> <input id="item" type="text" class="form-control" [ngbTypeahead]="search"
+								(focus)="focus$.next($any($event).target.value)"
+								(click)="click$.next($any($event).target.value)" #instance="ngbTypeahead" size="2"
+								name="{{field.item}}" [(ngModel)]="field.item" /> </td>
+						<td>
+							<input class="form-control" type="text" id="product_qty" size="2"
+								name="{{field.product_qty}}" [(ngModel)]="field.product_qty" />
+						</td>
+						<td>
+							<input class="form-control" type="text" id="required_item_qty"
+								name="{{field.required_item_qty}}" [(ngModel)]="field.required_item_qty" size="2"
+								(keyup.enter)="addBomDetails()" />
+						</td>
+						<td>
+							<button class="btn btn-outline-primary btn-sm" style="margin:5px;" type="button"
+								(click)="field.expanded = !field.expanded"> <i class="fa fa-edit"></i></button>
+							<button class="btn btn-outline-danger btn-sm" style="margin:5px;" type="button"
+								(click)="deleteBomDetails(i)"> <i class="fa fa-minus"></i></button>
+						</td>
+					</tr>
+
+					<ng-container *ngIf="field.expanded">
+						<tr>
+							<td colspan="5">
+								<label for="attribute_mapping_based_on">Attribute Mapping Based on</label>
+								<select class="custom-select" (change)="on_attribute_selection($event)"
+									id="attribute_mapping_based_on">
+									<option selected>Select Attribute</option>
+									<option value="Size">Size</option>
+									<option value="Colour">Colour</option>
+									<option value="Part">Part</option>
+									<option value="Dia">Dia</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="5">
+								<label>Attribute Mapping</label>
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>Item Attribute Value</th>
+											<th>Accessory Attribute Value</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let field of attributeMappings; let i = index">
+											<td>
+												<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+													[settings]="attributeValueDropdownSettings"
+													[data]="attribute_value_list" [disabled]="disableAttribute"
+													(ngModel)="selected_attr_value">
+												</ng-multiselect-dropdown>
+											</td>
+											<td>
+												<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+													[settings]="attributeValueDropdownSettings"
+													[data]="attribute_value_list" [disabled]="disableAttribute"
+													(ngModel)="selected_attr_value">
+												</ng-multiselect-dropdown>
+											</td>
+											<td>
+												<button class="btn btn-outline-danger btn-sm" type="button"
+													(click)="deleteAttributeMapping(i)"> <i
+														class="fa fa-minus"></i></button>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+													[settings]="attributeValueDropdownSettings"
+													[data]="attribute_value_list" [disabled]="disableAttribute"
+													(ngModel)="selected_attr_value">
+												</ng-multiselect-dropdown>
+											</td>
+											<td>
+												<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+													[settings]="attributeValueDropdownSettings"
+													[data]="attribute_value_list" [disabled]="disableAttribute"
+													(ngModel)="selected_attr_value">
+												</ng-multiselect-dropdown>
+											</td>
+											<td><button class="btn btn-outline-success btn-sm" type="button"
+													(click)="addAttributeMapping()"> <i class="fa fa-plus"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</ng-container>
+				</ng-container>
+				<tr>
+					<td>
+						<input id="item" type="text" class="form-control" [ngbTypeahead]="search"
+							(focus)="focus$.next($any($event).target.value)"
+							(click)="click$.next($any($event).target.value)" #instance="ngbTypeahead" size="2"
+							name="item" [(ngModel)]="selectedBomRow.item" />
+					</td>
+					<td>
+						<input class="form-control" type="text" id="product_qty" name="product_qty" size="2"
+							[(ngModel)]="selectedBomRow.product_qty" autofocus />
+					</td>
+					<td>
+						<input class="form-control" type="text" id="required_item_qty" name="required_item_qty" size="2"
+							[(ngModel)]="selectedBomRow.required_item_qty" (keyup.enter)="addBomDetails()" />
+					</td>
+					<td>
+						<button class="btn btn-outline-primary btn-sm" style="margin:5px;" type="button"
+							(click)="collapseRow.toggle()" [attr.aria-expanded]="!rowCollapsed" aria-controls="row"> <i
+								class="fa fa-edit"></i></button>
+						<button class="btn btn-outline-success btn-sm" style="margin:5px;" type="button"
+							(click)="addBomDetails()"> <i class="fa fa-plus"></i></button>
+					</td>
+				</tr>
+
+				<ng-container>
+					<tr #collapseRow="ngbCollapse" [(ngbCollapse)]="rowCollapsed">
+						<td colspan="5">
+							<label for="attribute_mapping_based_on">Attribute Mapping Based on</label>
+							<select class="custom-select" (change)="on_attribute_selection($event)"
+								id="attribute_mapping_based_on">
+								<option selected>Select Attribute</option>
+								<option value="Size">Size</option>
+								<option value="Colour">Colour</option>
+								<option value="Part">Part</option>
+								<option value="Dia">Dia</option>
+							</select>
+						</td>
+					</tr>
+					<tr #collapseRow="ngbCollapse" [(ngbCollapse)]="rowCollapsed">
+						<td colspan="5">
+							<label>Attribute Mapping</label>
+							<table class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Item Attribute Value</th>
+										<th>Accessory Attribute Value</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let field of attributeMappings; let i = index">
+										<td>
+											<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+												[settings]="attributeValueDropdownSettings"
+												[data]="attribute_value_list" [disabled]="disableAttribute"
+												(ngModel)="selected_attr_value">
+											</ng-multiselect-dropdown>
+										</td>
+										<td>
+											<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+												[settings]="attributeValueDropdownSettings"
+												[data]="attribute_value_list" [disabled]="disableAttribute"
+												(ngModel)="selected_attr_value">
+											</ng-multiselect-dropdown>
+										</td>
+										<td>
+											<button class="btn btn-outline-danger btn-sm" type="button"
+												(click)="deleteAttributeMapping(i)"> <i
+													class="fa fa-minus"></i></button>
+										</td>
+									</tr>
+
+									<tr>
+										<td>
+											<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+												[settings]="attributeValueDropdownSettings"
+												[data]="attribute_value_list" [disabled]="disableAttribute"
+												(ngModel)="selected_attr_value">
+											</ng-multiselect-dropdown>
+										</td>
+										<td>
+											<ng-multiselect-dropdown [placeholder]="'Select Attribute Value'"
+												[settings]="attributeValueDropdownSettings"
+												[data]="attribute_value_list" [disabled]="disableAttribute"
+												(ngModel)="selected_attr_value">
+											</ng-multiselect-dropdown>
+										</td>
+										<td><button class="btn btn-outline-success btn-sm" type="button"
+												(click)="addAttributeMapping()"> <i class="fa fa-plus"></i></button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</ng-container>
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -11,6 +11,7 @@ export class ManufacturingComponent implements OnInit {
     { name: 'View DC', path: '/home/mfg/viewdc' },
     { name: 'New GRN', path: '/home/mfg/newgrn' },
     { name: 'View GRN', path: '/home/mfg/viewgrn' },
+    { name: 'Purchase Order', path: '/home/mfg/purchase-order/purchase-order-list' }
   ];
 
   constructor() {}
