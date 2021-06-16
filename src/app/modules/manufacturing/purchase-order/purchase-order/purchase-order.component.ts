@@ -21,7 +21,7 @@ export class PurchaseOrderComponent implements OnInit {
   poDetailsForm!: FormGroup;
   itemCommentForm!: FormGroup;
   itemDetailsSectionCollapsed = false;
-  rowCollapsed = false;
+  rowCollapsed = true;
   commentForm!: FormGroup;
   lotDropdownSettings!: IDropdownSettings;
   selectedLot = [];
@@ -81,6 +81,7 @@ export class PurchaseOrderComponent implements OnInit {
     );
   }
   addItemTableRow() {
+    this.selectedItemRow['expanded'] = false
     this.itemTableMapping.push(this.selectedItemRow)
     this.selectedItemRow = {};
   }
